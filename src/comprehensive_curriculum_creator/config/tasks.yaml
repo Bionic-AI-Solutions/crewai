@@ -1,0 +1,163 @@
+---
+create_curriculum_outline:
+  description: |-
+    Create a comprehensive curriculum outline for {topic} based on the following parameters:
+    - Duration: {duration}
+    - Number of sessions: {sessions}
+    - Session duration: {session_duration}
+    - Project-based: {project_based}
+    - Audience level: {audience_level}
+
+    The outline should include:
+    1. Learning objectives and outcomes
+    2. Module breakdown with weekly progression
+    3. Key topics and concepts for each session
+    4. Prerequisite knowledge required
+    5. Assessment strategy
+    6. Resource requirements
+
+    **IMPORTANT: This is Stage 1 - REVIEW CHECKPOINT**
+    Present the outline in a clear, structured format that can be reviewed and approved before proceeding to detailed development. The automation will PAUSE here for human review and feedback.
+
+    **Next Steps After Approval:**
+    - If approved: Continue to detailed research and content development
+    - If revisions needed: Provide specific feedback for outline adjustments
+  expected_output: "A detailed curriculum outline in markdown format showing the complete
+    course structure, learning progression, module descriptions, session topics, and
+    learning objectives. \n\n**REVIEW CHECKPOINT OUTPUT:**\nThis outline is presented
+    for stakeholder review and approval. Please review and provide feedback on:\n-
+    Course structure and flow\n- Learning objectives alignment\n- Session topics and
+    coverage\n- Module organization\n- Assessment approach\n\nThe automation will
+    PAUSE here. Provide approval or revision requests before proceeding to Stage 2
+    (detailed content development)."
+  agent: curriculum_architect
+continue_course_development:
+  description: "**STAGE 2: DETAILED DEVELOPMENT** (Run only after curriculum outline
+    approval)\n\nThis task continues the curriculum development process after the
+    outline has been reviewed and approved. It coordinates the remaining development
+    stages:\n\n1. **Research Phase**: Conduct deep research on approved topics\n2.
+    **Project Design Phase**: Create hands-on projects and real-world use cases (if
+    {project_based} is \"yes\")  \n3. **Content Development Phase**: Create all learning
+    materials with detailed formats\n4. **Organization Phase**: Structure everything
+    into the complete course package\n\n**Prerequisites**: \n- Curriculum outline
+    must be approved\n- Any requested revisions must be incorporated\n- Human sign-off
+    to proceed with detailed development\n\nThis task will coordinate all remaining
+    agents to complete the full course development based on the approved outline."
+  expected_output: Coordination confirmation that all remaining stages (Research,
+    Project Design, Content Development, and Organization) will be executed based
+    on the approved curriculum outline. This task serves as the gateway to Stage 2
+    development.
+  agent: curriculum_architect
+  context:
+  - create_curriculum_outline
+research_course_content:
+  description: |-
+    Conduct deep research on {topic} for {audience_level} to gather comprehensive information for each module and session identified in the curriculum outline. Research should include:
+
+    1. Current industry trends and best practices
+    2. Authoritative sources and references
+    3. Real-world examples and case studies
+    4. Technical documentation and resources
+    5. Learning resources appropriate for {audience_level}
+    6. Tools, technologies, and methodologies relevant to {topic}
+
+    Focus on finding up-to-date, credible information that will form the foundation for detailed learning materials.
+  expected_output: A comprehensive research document in markdown format containing
+    organized information for each module and session, including sources, references,
+    key concepts, examples, and supporting materials that will be used to develop
+    the detailed course content.
+  agent: subject_matter_researcher
+  context:
+  - continue_course_development
+design_project_based_activities:
+  description: |-
+    If {project_based} is "yes", design comprehensive hands-on projects and real-world use cases for {topic} suitable for {audience_level}. Projects should:
+
+    1. Align with learning objectives from each module
+    2. Be completable within the {duration} timeframe
+    3. Provide practical experience with {topic}
+    4. Scale appropriately for {audience_level}
+    5. Include real-world scenarios and applications
+    6. Connect theoretical concepts to practical implementation
+
+    Create project specifications including objectives, requirements, deliverables, assessment criteria, and implementation guidelines. If {project_based} is "no", focus on alternative practical exercises and case studies.
+  expected_output: Detailed project specifications document in markdown format containing
+    project descriptions, learning outcomes, requirements, step-by-step implementation
+    guides, assessment criteria, and real-world use cases that can be integrated into
+    the course structure.
+  agent: project_specialist
+  context:
+  - continue_course_development
+develop_learning_materials:
+  description: "Create comprehensive learning materials for ALL sessions following
+    specific professional formats. Based on the approved curriculum outline and research,
+    develop complete course content for every session across all modules and weeks.\n\n**For
+    EVERY session, create these 4 documents:**\n\n1. **ENHANCED SLIDES PRESENTATION
+    (slides_presentation.md)**\n   - Title slide with course info, session details,
+    duration, instructor name, date\n   - Learning objectives slide (\"What You'll
+    Master Today\")\n   - Content slides with clear titles, bullet points, and visual
+    descriptions\n   - **DETAILED TALKING POINTS** for each slide (2-3 minutes of
+    speaking content):\n     * Speaker notes and delivery guidance\n     * Key discussion
+    prompts and questions to ask\n     * Transition statements between slides  \n
+    \    * Timing recommendations and pacing notes\n     * Interactive elements and
+    audience engagement techniques\n     * Real-world examples and stories to illustrate
+    points\n   - Session structure with timing breakdowns\n   - Q&A sections and preparation
+    notes for next session\n\n2. **CLASSWORK MATERIAL (course_material.md)**\n   -
+    Multiple timed parts (Part 1: Interactive Discussion - 20 minutes)\n   - Individual
+    reflection activities and group work instructions\n   - Hands-on exploration with
+    specific tools and step-by-step guidance\n   - Worksheets with detailed tables
+    and mapping exercises\n   - Case study analysis with structured questions\n   -
+    Goal setting and wrap-up activities\n   - Comprehensive instructor notes with
+    materials, assessment criteria, differentiation strategies\n\n3. **HOMEWORK QUESTIONS
+    (homework_questions.md)**\n   - Clear objectives and estimated time for each task\n
+    \  - Multiple structured tasks with detailed instructions\n   - Research requirements
+    with company/tool suggestions and search terms\n   - Reflection questions for
+    critical thinking\n   - Complete submission format template\n   - Evaluation criteria
+    with percentage weightings\n   - Tips for success and support information\n\n4.
+    **HOMEWORK ANSWER KEYS (homework_keys.md)**\n   - Comprehensive sample answers
+    for all tasks\n   - Evaluation guidelines with assessment rubrics\n   - Common
+    student mistakes and correction strategies\n   - Discussion points for next session\n
+    \  - Additional resources for advanced learners\n   - Assessment criteria breakdown
+    with quality indicators\n\n**COVERAGE REQUIREMENT:** Generate content for ALL
+    {sessions} sessions distributed across the {duration} timeframe, ensuring each
+    session builds upon previous learning and is appropriate for {audience_level}.\""
+  expected_output: Complete set of learning materials in markdown format organized
+    by session, including slide presentations, detailed course content, homework assignments,
+    and answer keys. All materials should be ready for immediate use and appropriately
+    tailored for the target audience.
+  agent: learning_content_developer
+  context:
+  - research_course_content
+  - design_project_based_activities
+organize_course_structure:
+  description: "Create the COMPLETE curriculum package with ALL sessions and materials
+    organized in the specified folder structure, then create a zip file for easy distribution.
+    Generate the full course content including:\n\n**COMPLETE COURSE STRUCTURE:**\n```\n{topic}/\n├──
+    Course_Overview_and_Guide/\n│   ├── course_overview.md\n│   ├── instructor_guide.md\n│
+    \  ├── assessment_rubrics.md\n│   └── implementation_schedule.md\n├── Module_<Name>/\n│
+    \  ├── Week_<number>/\n│   │   ├── Session_<number>/\n│   │   │   ├── Classwork/\n│
+    \  │   │   │   ├── slides_presentation.md (with detailed talking points)\n│   │
+    \  │   │   │   └── course_material.md\n│   │   │   └── Homework/\n│   │   │       ├──
+    homework_questions.md\n│   │   │       └── homework_keys.md\n```\n\n**REQUIREMENTS:**\n\n1.
+    **Generate ALL sessions** - Create content for every session based on the {sessions}
+    parameter and {duration}\n2. **Enhanced slide format** - Include 2-3 minutes of
+    detailed talking points for each slide, including:\n   - Speaker delivery notes\n
+    \  - Audience engagement techniques\n   - Transition statements\n   - Real-world
+    examples and stories\n   - Interactive prompts and questions\n3. **Complete course
+    package** including:\n   - Course overview and learning outcomes\n   - Instructor
+    implementation guide\n   - Assessment rubrics and guidelines\n   - Session-by-session
+    schedule\n4. **Professional formatting** - All content ready for immediate instructor
+    use\n5. **ZIP CREATION** - Create a downloadable zip file containing the complete
+    curriculum package\n\n**OUTPUT FORMAT:**\n1. First organize all materials into
+    the proper folder structure\n2. Write all content files to their appropriate locations\n3.
+    Create a zip file named '{topic}_Curriculum_Package.zip' for easy distribution\n\nCreate
+    a comprehensive, deployment-ready curriculum that covers all {sessions} sessions
+    across the {duration} timeframe, packaged as a downloadable zip file.\""
+  expected_output: A complete, organized curriculum package with all materials structured
+    in the specified folder hierarchy, including navigation aids, instructor guides,
+    and implementation documentation. The package should be immediately usable for
+    course delivery and provided as a downloadable zip file with the naming convention
+    '{topic}_Curriculum_Package.zip'.
+  agent: course_structure_organizer
+  context:
+  - develop_learning_materials

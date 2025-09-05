@@ -1,0 +1,151 @@
+---
+# Research Configuration for Deep Research Integration
+# This file defines different research modes and their parameters
+
+research_modes:
+  # Quick research for basic information gathering (5-10 minutes)
+  quick:
+    model: "gpt-4o-mini"
+    max_iterations: 3
+    max_concurrent_researchers: 2
+    search_api: "tavily"
+    max_sources: 10
+    timeout_minutes: 10
+    description: "Fast research for basic information and quick answers"
+    use_cases:
+      - Simple fact-checking
+      - Basic topic overview
+      - Quick reference gathering
+
+  # Deep research for comprehensive analysis (15-30 minutes)
+  deep:
+    model: "gpt-4o"
+    max_iterations: 6
+    max_concurrent_researchers: 5
+    search_api: "tavily"
+    max_sources: 20
+    timeout_minutes: 30
+    description: "Comprehensive research with multiple sources and analysis"
+    use_cases:
+      - Detailed topic analysis
+      - Multi-perspective research
+      - Industry trend analysis
+      - Technology evaluation
+
+  # Academic research for scholarly work (20-45 minutes)
+  academic:
+    model: "gpt-4o"
+    max_iterations: 8
+    max_concurrent_researchers: 3
+    search_api: "openai"
+    max_sources: 30
+    timeout_minutes: 45
+    academic_focus: true
+    description: "Rigorous academic research with scholarly sources"
+    use_cases:
+      - Academic paper research
+      - Scholarly literature review
+      - Evidence-based analysis
+      - Citation-heavy research
+
+# Default research settings
+defaults:
+  model: "gpt-4o"
+  max_iterations: 6
+  max_concurrent_researchers: 5
+  search_api: "tavily"
+  max_sources: 20
+  timeout_minutes: 30
+  cache_enabled: true
+  cache_ttl_days: 30
+
+# Curriculum-specific research configurations
+curriculum_research:
+  # Research for creating learning objectives
+  learning_objectives:
+    mode: "deep"
+    focus_areas:
+      - "current best practices"
+      - "industry standards"
+      - "learner needs assessment"
+    output_format: "structured_list"
+
+  # Research for course content development
+  content_development:
+    mode: "deep"
+    focus_areas:
+      - "comprehensive topic coverage"
+      - "recent developments"
+      - "practical applications"
+      - "case studies"
+    output_format: "narrative_report"
+
+  # Research for assessment creation
+  assessment_creation:
+    mode: "academic"
+    focus_areas:
+      - "learning outcome measurement"
+      - "assessment best practices"
+      - "validity and reliability"
+    output_format: "methodology_focused"
+
+  # Research for project-based learning
+  project_based:
+    mode: "deep"
+    focus_areas:
+      - "real-world applications"
+      - "industry case studies"
+      - "hands-on implementation"
+      - "best practices"
+    output_format: "practical_examples"
+
+# API Configuration
+api_config:
+  tavily:
+    priority: 1
+    rate_limit: 1000
+    timeout: 30
+    retries: 3
+
+  openai:
+    priority: 2
+    rate_limit: 10000
+    timeout: 60
+    retries: 3
+
+  anthropic:
+    priority: 3
+    rate_limit: 1000
+    timeout: 60
+    retries: 3
+
+# Quality Assurance Settings
+quality_assurance:
+  min_confidence_score: 0.7
+  min_sources_required: 3
+  require_citations: true
+  validate_sources: true
+  plagiarism_check: true
+
+# Monitoring and Analytics
+monitoring:
+  enable_metrics: true
+  log_research_queries: true
+  track_performance: true
+  alert_on_failures: true
+  metrics_retention_days: 90
+
+# Cost Management
+cost_management:
+  max_cost_per_research: 5.0  # USD
+  monthly_budget_limit: 500.0  # USD
+  cost_alert_threshold: 0.8  # 80% of budget
+  enable_cost_tracking: true
+
+# Error Handling
+error_handling:
+  max_retries: 3
+  retry_delay_seconds: 5
+  fallback_to_basic_search: true
+  graceful_degradation: true
+  user_friendly_messages: true

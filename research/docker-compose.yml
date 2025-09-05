@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  deep-research:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: curriculum-deep-research
+    environment:
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+      - LANGCHAIN_TRACING_V2=true
+      - LANGCHAIN_PROJECT=curriculum-deep-research
+      - PYTHONPATH=/app/src
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+      - ./research_output:/app/research_output
+      - ./cache:/app/cache
+    networks:
+      - curriculum-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import open_deep_research; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  research-cache:
+    image: redis:7-alpine
+    container_name: curriculum-research-cache
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - curriculum-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  research-monitor:
+    build:
+      context: .
+      dockerfile: monitor.Dockerfile
+    container_name: curriculum-research-monitor
+    environment:
+      - REDIS_URL=redis://research-cache:6379
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+      - ./metrics:/app/metrics
+    networks:
+      - curriculum-net
+    restart: unless-stopped
+    depends_on:
+      - research-cache
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  curriculum-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
