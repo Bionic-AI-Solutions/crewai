@@ -8,7 +8,7 @@ from pathlib import Path
 import tempfile
 import os
 
-from crewai_tools import BaseTool
+from crewai_tools.tools import BaseTool
 from pydantic import BaseModel, Field
 
 # Configure logging
